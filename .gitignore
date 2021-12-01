@@ -1,0 +1,5 @@
+**/target
+.bsp/
+.metals/
+project/project/
+metals.sbt

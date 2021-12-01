@@ -1,0 +1,1 @@
+object Day1 {}
