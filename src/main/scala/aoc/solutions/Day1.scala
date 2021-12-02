@@ -3,7 +3,7 @@ package aoc.solutions
 import aoc.input.day1
 import fs2.Chunk
 
-object Day1Solution:
+object Day1:
 
   def part1 = day1
     .sliding(2)
@@ -30,4 +30,4 @@ object Day1Solution:
       .compile
       .lastOrError
   end part2
-end Day1Solution
+end Day1
