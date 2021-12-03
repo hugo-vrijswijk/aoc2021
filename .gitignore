@@ -3,3 +3,4 @@
 .metals/
 project/project/
 metals.sbt
+.bloop/
