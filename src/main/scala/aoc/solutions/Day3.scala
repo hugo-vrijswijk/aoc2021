@@ -9,7 +9,7 @@ object Day3:
 
   def part1[F[_]](input: Stream[F, String])(using Concurrent[F]) =
     case class Frequency(times0: Int, times1: Int)
-    
+
     given freqMonoid: Monoid[Frequency] =
       Monoid.instance(Frequency(0, 0), (a, b) => Frequency(a.times0 + b.times0, a.times1 + b.times1))
 
