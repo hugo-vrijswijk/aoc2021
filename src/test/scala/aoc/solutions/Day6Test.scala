@@ -3,16 +3,12 @@ package aoc.solutions
 import aoc.input.day6
 import munit.CatsEffectSuite
 
-import scala.concurrent.duration.Duration
-
 class Day6Test extends CatsEffectSuite:
 
-  override val munitTimeout = Duration(3, "s")
+  val testInput = Seq(3, 4, 3, 1, 2)
 
   test("part 1 example") {
-    val input = Seq(3, 4, 3, 1, 2)
-
-    assertEquals(Day6.part1(input), 5934L)
+    assertEquals(Day6.part1(testInput), 5934L)
   }
 
   test("part 1") {
@@ -20,9 +16,7 @@ class Day6Test extends CatsEffectSuite:
   }
 
   test("part 2 example") {
-    val input = Seq(3, 4, 3, 1, 2)
-
-    assertEquals(Day6.part2(input), 26984457539L)
+    assertEquals(Day6.part2(testInput), 26984457539L)
   }
 
   test("part 2") {

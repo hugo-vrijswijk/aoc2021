@@ -3,11 +3,7 @@ package aoc.solutions
 import aoc.input.day5
 import munit.CatsEffectSuite
 
-import scala.concurrent.duration.Duration
-
 class Day5Test extends CatsEffectSuite:
-
-  override val munitTimeout = Duration(3, "s")
 
   val input = Seq(
     "0,9 -> 5,9",

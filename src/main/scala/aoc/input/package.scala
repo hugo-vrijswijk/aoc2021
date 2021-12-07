@@ -14,3 +14,5 @@ def day4 = readFileString("Day4")
 def day5 = readFile("Day5")
 
 def day6 = readFile("Day6").flatMap(s => Stream.emits(s.split(','))).map(_.toInt)
+
+def day7 = readFile("Day7").flatMap(s => Stream.emits(s.split(','))).map(_.toInt)
