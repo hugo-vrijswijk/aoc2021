@@ -1,24 +1,20 @@
 package aoc.solutions
 
 import aoc.input.day1
-import fs2.Chunk
+import fs2.{Chunk, Pipe}
 
 object Day1:
 
-  def part1 = day1
-    .sliding(2)
+  def part1[F[_]]: Pipe[F, Int, Int] = _.sliding(2)
     .fold(0) { case (acc, a) =>
       if a(1) > a(0) then acc + 1
       else acc
     }
-    .compile
-    .lastOrError
 
-  def part2 =
-    def sum[A: Numeric](chunk: Chunk[A]): A = chunk.toList.sum
+  def part2[F[_]]: Pipe[F, Int, Int] =
+    def sum[A](chunk: Chunk[A])(using n: Numeric[A]): A = chunk.foldLeft(n.zero)(n.plus(_, _))
 
-    day1
-      .sliding(3)
+    _.sliding(3)
       .sliding(2)
       .fold(0) { case (acc, a) =>
         val left  = a(0)
@@ -27,7 +23,6 @@ object Day1:
         if sum(right) > sum(left) then acc + 1
         else acc
       }
-      .compile
-      .lastOrError
   end part2
+
 end Day1

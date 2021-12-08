@@ -6,9 +6,9 @@ import fs2.{Pure, Stream}
 import aoc.Util.parseAllGet
 
 object Day4:
-  def part1(input: String): Int = go(input).head.toList.head
+  def part1(input: String) = go(input).head
 
-  def part2(input: String): Int = go(input).toList.last
+  def part2(input: String) = go(input)
 
   private def go(input: String) =
     val (instructions, boards) = parseBoards(input)
@@ -24,11 +24,10 @@ object Day4:
         (oldWinners ++ (winningBoards ++ newWinners).map(winningBoard => winningBoard.score(instruction)), togo)
       }
       .flatMap(f => Stream.emits(f._1))
-
   end go
 
   opaque type Instructions = NonEmptyList[Int]
-  type Boards              = NonEmptyList[Board]
+  opaque type Boards       = NonEmptyList[Board]
   opaque type Row          = NonEmptyList[(Boolean, Int)]
   opaque type Board        = NonEmptyList[Row]
 

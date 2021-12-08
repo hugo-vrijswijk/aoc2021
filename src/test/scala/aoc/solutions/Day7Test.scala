@@ -1,9 +1,9 @@
 package aoc.solutions
 
 import aoc.input.day7
-import munit.CatsEffectSuite
+import aoc.AocSuite
 
-class Day7Test extends CatsEffectSuite:
+class Day7Test extends AocSuite:
 
   val testInput = Seq(16, 1, 2, 0, 4, 2, 7, 1, 2, 14)
   test("part 1 example") {

@@ -2,19 +2,17 @@ package aoc.solutions
 
 import aoc.input.day3
 import cats.Monoid
-import cats.effect.Concurrent
-import fs2.Stream
+import fs2.Pipe
 
 object Day3:
 
-  def part1[F[_]](input: Stream[F, String])(using Concurrent[F]) =
+  def part1[F[_]]: Pipe[F, String, Int] =
     case class Frequency(times0: Int, times1: Int)
 
     given freqMonoid: Monoid[Frequency] =
       Monoid.instance(Frequency(0, 0), (a, b) => Frequency(a.times0 + b.times0, a.times1 + b.times1))
 
-    input
-      .map(_.map(b => if b == '0' then Frequency(1, 0) else Frequency(0, 1)))
+    _.map(_.map(b => if b == '0' then Frequency(1, 0) else Frequency(0, 1)))
       .fold(Seq.fill(12)(freqMonoid.empty)) { (acc, freqs) =>
         acc.zip(freqs).map(freqMonoid.combine(_, _))
       } // Count frequencies of all columns
@@ -29,8 +27,6 @@ object Day3:
 
         result * x
       }
-      .compile
-      .lastOrError
   end part1
 
   def part2(input: Seq[String]) =
@@ -42,7 +38,7 @@ object Day3:
         if seq.length > 1 then seq.filter(_.charAt(index) == digit) else seq
       }
 
-    def parseRating(predicate: (Int, Int) => Boolean) = java.lang.Integer.parseInt(findRating(predicate).head, 2)
+    def parseRating(predicate: (Int, Int) => Boolean) = Integer.parseInt(findRating(predicate).head, 2)
 
     val generatorRating = parseRating(Ordering[Int].gteq)
     val scrubberRating  = parseRating(Ordering[Int].lt)

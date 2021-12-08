@@ -1,22 +1,22 @@
 package aoc.solutions
 
+import aoc.Util.parseAllGet
 import aoc.input
 import cats.parse.{Numbers, Parser, Rfc5234}
+import fs2.Pipe
 
 object Day2:
 
-  def part1 = instructions
+  def part1[F[_]]: Pipe[F, String, Int] = _.map(parser.parseAllGet)
     .fold(Location(0, 0)) { (location, instruction) =>
       instruction match
         case Instruction.Down(units)    => location.copy(depth = location.depth + units)
         case Instruction.Up(units)      => location.copy(depth = location.depth - units)
         case Instruction.Forward(units) => location.copy(x = location.x + units)
     }
-    .map(location => location.x * location.depth)
-    .compile
-    .lastOrError
+    .map(_.position)
 
-  def part2 = instructions
+  def part2[F[_]]: Pipe[F, String, Int] = _.map(parser.parseAllGet)
     .fold(Location(0, 0)) { (location, instruction) =>
       instruction match
         case Instruction.Down(units) => location.copy(aim = location.aim + units)
@@ -24,24 +24,17 @@ object Day2:
         case Instruction.Forward(units) =>
           location.copy(x = location.x + units, depth = location.aim * units + location.depth)
     }
-    .map(location => location.x * location.depth)
-    .compile
-    .lastOrError
-
-  private val instructions = input.day2.map(parser.parseAll(_)).map {
-    case Right(instruction) => instruction
-    case Left(err)          => new IllegalArgumentException(err.toString)
-  }
+    .map(_.position)
 
   private val parser: Parser[Instruction] =
-    val direction = Parser.stringIn(Seq("down", "up", "forward"))
-    val units     = Numbers.digits.map(_.toInt)
-
-    ((direction <* Rfc5234.wsp) ~ units).map {
-      case ("down", units)    => Instruction.Down(units)
-      case ("up", units)      => Instruction.Up(units)
-      case ("forward", units) => Instruction.Forward(units)
+    val direction = Parser.stringIn(Seq("down", "up", "forward")).map {
+      case "down"    => Instruction.Down(_)
+      case "up"      => Instruction.Up(_)
+      case "forward" => Instruction.Forward(_)
     }
+    val units = Numbers.digits.map(_.toInt)
+
+    ((direction <* Rfc5234.wsp) ~ units).map(_(_))
   end parser
 
   private enum Instruction(units: Int):
@@ -49,6 +42,7 @@ object Day2:
     case Up(units: Int) extends Instruction(units)
     case Forward(units: Int) extends Instruction(units)
 
-  private case class Location(x: Int, depth: Int, aim: Int = 0)
+  private case class Location(x: Int, depth: Int, aim: Int = 0):
+    def position = x * depth
 
 end Day2

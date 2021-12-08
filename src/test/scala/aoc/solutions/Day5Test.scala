@@ -2,10 +2,12 @@ package aoc.solutions
 
 import aoc.input.day5
 import munit.CatsEffectSuite
+import fs2.Stream
+import aoc.AocSuite
 
-class Day5Test extends CatsEffectSuite:
+class Day5Test extends AocSuite:
 
-  val input = Seq(
+  val input = Stream(
     "0,9 -> 5,9",
     "8,0 -> 0,8",
     "9,4 -> 3,4",
@@ -19,19 +21,19 @@ class Day5Test extends CatsEffectSuite:
   )
 
   test("part 1 example") {
-    assertEquals(Day5.part1(input), 5)
+    input.through(Day5.part1).assertLastEqualsPure(5)
   }
 
   test("part 1") {
-    day5.compile.toVector.map(Day5.part1).assertEquals(5169)
+    day5.through(Day5.part1).assertLastEquals(5169)
   }
 
   test("part 2 example") {
-    assertEquals(Day5.part2(input), 12)
+    input.through(Day5.part2).assertLastEqualsPure(12)
   }
 
   test("part 2") {
-    day5.compile.toVector.map(Day5.part2).assertEquals(22083)
+    day5.through(Day5.part2).assertLastEquals(22083)
   }
 
 end Day5Test

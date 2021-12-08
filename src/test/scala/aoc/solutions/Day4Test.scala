@@ -1,9 +1,9 @@
 package aoc.solutions
 
+import aoc.AocSuite
 import aoc.input.day4
-import munit.CatsEffectSuite
 
-class Day4Test extends CatsEffectSuite:
+class Day4Test extends AocSuite:
 
   val input = """7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
 
@@ -26,20 +26,19 @@ class Day4Test extends CatsEffectSuite:
 2  0 12  3  7"""
 
   test("part 1 example") {
-
-    assertEquals(Day4.part1(input), 4512)
+    Day4.part1(input).assertLastEqualsPure(4512)
   }
 
   test("part 1") {
-    day4.map(Day4.part1).assertEquals(10680)
+    day4.flatMap(Day4.part1).assertLastEquals(10680)
   }
 
   test("part 2 example") {
-    assertEquals(Day4.part2(input), 1924)
+    Day4.part2(input).assertLastEqualsPure(1924)
   }
 
   test("part 2") {
-    day4.map(Day4.part2).assertEquals(31892)
+    day4.flatMap(Day4.part2).assertLastEquals(31892)
   }
 
 end Day4Test

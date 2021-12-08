@@ -1,15 +1,16 @@
 package aoc.solutions
 
-import munit.CatsEffectSuite
+import aoc.AocSuite
+import aoc.input.day2
 
-class Day2Test extends CatsEffectSuite:
+class Day2Test extends AocSuite:
 
   test("part 1") {
-    Day2.part1.assertEquals(1947824)
+    day2.through(Day2.part1).assertLastEquals(1947824)
   }
 
   test("part 2") {
-    Day2.part2.assertEquals(1813062561)
+    day2.through(Day2.part2).assertLastEquals(1813062561)
   }
 
 end Day2Test

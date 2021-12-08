@@ -1,27 +1,26 @@
 package aoc.solutions
 
-import cats.parse.{Numbers, Parser}
-import cats.parse.Rfc5234
-import aoc.Util.parseAllGet
+import aoc.Util.{groupBy, parseAllGet}
+import cats.Eq
+import cats.parse.{Numbers, Parser, Rfc5234}
+import fs2.Collector.Builder
+import fs2.{Pipe, Stream}
 
 object Day5:
-  def part1(input: Seq[String]): Int =
-    val lines = parse(input)
-    overlap(lines.filter(_.isOrthogonal))
 
-  def part2(input: Seq[String]): Int =
-    val lines = parse(input)
-    overlap(lines)
+  def part1[F[_]]: Pipe[F, String, Int] = _.map(parser.parseAllGet).filter(_.isOrthogonal).through(overlap)
 
-  def overlap(lines: Seq[Line]): Int = lines.flatMap(_.points).groupBy(identity).count(_._2.length > 1)
+  def part2[F[_]]: Pipe[F, String, Int] = _.map(parser.parseAllGet).through(overlap)
 
-  def parse(input: Seq[String]): Seq[Line] =
+  def overlap[F[_]]: Pipe[F, Line, Int] =
+    _.map(_.points).flatMap(Stream.emits).through(groupBy(identity)).filter(_._2.size > 1).through(size)
+
+  def size[F[_], A]: Pipe[F, A, Int] = _.fold(0)((acc, _) => acc + 1)
+
+  val parser =
     val number = Numbers.nonNegativeIntString.map(_.toInt)
     val coord  = ((number <* Parser.char(',')) ~ number).map(Coord(_, _))
-    val line   = ((coord <* Parser.string(" -> ")) ~ coord).map(Line(_, _))
-
-    input.map(line.parseAllGet)
-  end parse
+    ((coord <* Parser.string(" -> ")) ~ coord).map(Line(_, _))
 
   case class Coord(x: Int, y: Int)
   case class Line(from: Coord, to: Coord):
@@ -29,6 +28,6 @@ object Day5:
     def points: Seq[(Int, Int)] =
       val xs = from.x to to.x by (if from.x < to.x then 1 else -1)
       val ys = from.y to to.y by (if from.y < to.y then 1 else -1)
-      xs.zipAll(ys, from.x, from.y).map(_ -> _)
+      xs.zipAll(ys, from.x, from.y)
   end Line
 end Day5

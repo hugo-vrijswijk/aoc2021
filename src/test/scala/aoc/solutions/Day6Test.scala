@@ -1,9 +1,9 @@
 package aoc.solutions
 
 import aoc.input.day6
-import munit.CatsEffectSuite
+import aoc.AocSuite
 
-class Day6Test extends CatsEffectSuite:
+class Day6Test extends AocSuite:
 
   val testInput = Seq(3, 4, 3, 1, 2)
 
